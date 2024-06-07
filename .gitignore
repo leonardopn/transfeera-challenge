@@ -55,6 +55,10 @@ pids
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
+
+# Prisma.js
+prisma/database
+
 # Yarn
 .yarn/*
 !.yarn/cache
