@@ -3,22 +3,31 @@ import {
 	Body,
 	Controller,
 	Delete,
+	Get,
 	HttpCode,
 	Param,
 	Patch,
 	Post,
+	Query,
 } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { isNegative, isNumber } from "class-validator";
 import { CreateReceiverDto } from "./dto/create-receiver.dto";
 import { DeleteManyReceiversDto } from "./dto/delete-many-receivers.dto";
 import { PatchOneReceiverDto } from "./dto/patch-one-receiver.dto";
+import { SearchReceiversDto } from "./dto/search-recivers.dto";
 import { ReceiverService } from "./receiver.service";
 
 @Controller("receiver")
 @ApiTags("Receiver")
 export class ReceiverController {
 	constructor(private readonly receiverService: ReceiverService) {}
+
+	@Get()
+	@ApiOperation({ summary: "Search receivers by query" })
+	async search(@Query() data: SearchReceiversDto) {
+		return this.receiverService.search(data.q, data.page);
+	}
 
 	@Post()
 	@ApiOperation({ summary: "Create a new receiver" })

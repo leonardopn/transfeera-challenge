@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException, PreconditionFailedException } from "@nestjs/common";
 import { DatabaseService } from "src/database/database.service";
 import { IReceiver, IUpgradeReceiver } from "src/interfaces/Receiver";
 import { CreateReceiverDto } from "./dto/create-receiver.dto";
 import { PatchOneReceiverDto } from "./dto/patch-one-receiver.dto";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class ReceiverService {
@@ -65,5 +66,47 @@ export class ReceiverService {
 			where: { id: data.id },
 			data: dataToUpdateReceiver,
 		});
+	}
+
+	async search(query: string, page: number) {
+		//NOTE: Define the quantity per page
+		const quantityPerPage = 10;
+
+		//NOTE: Define the default where to use in the search
+		const where: Prisma.ReceiverWhereInput = {
+			OR: [
+				{ status: { contains: query } },
+				{ completed_name: { contains: query } },
+				{ pix_key_type: { contains: query } },
+				{ pix_key: { contains: query } },
+			],
+		};
+
+		//NOTE: get the total count and calculate the total pages
+		const totalCount = await this.dbService.receiver.count({ where });
+		const totalPages = Math.ceil(totalCount / quantityPerPage);
+
+		//NOTE: If the total count is 0, return an empty result
+		if (totalCount === 0) {
+			return { values: [], totalPages, totalCount, quantityPerPage };
+		}
+
+		//NOTE: If the page is greater than the total pages, throw an error
+		if (page > totalPages) {
+			throw new PreconditionFailedException("Page must be between 1 and " + totalPages);
+		}
+
+		//NOTE: Calculate the skip cursor
+		const skip = (page - 1) * quantityPerPage;
+
+		//NOTE: Get the values
+		const values = await this.dbService.receiver.findMany({
+			where,
+			take: quantityPerPage,
+			skip,
+		});
+
+		//NOTE: Return the values, total pages, total count and quantity per page
+		return { values, totalPages, totalCount, quantityPerPage };
 	}
 }
