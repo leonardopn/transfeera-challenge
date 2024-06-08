@@ -1,8 +1,8 @@
-import { base, pt_BR, pt_PT, en, Faker } from "@faker-js/faker";
-import { PrismaClient, Prisma } from "@prisma/client";
+import { Faker, base, en, pt_BR, pt_PT } from "@faker-js/faker";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { getRandomNumber } from "toolkit-extra/random";
-import { PixKeyType } from "src/interfaces/Receiver";
 import { fakerBr } from "@js-brasil/fakerbr";
+import { PixKeyType } from "src/constant/PixKeyType";
 
 export const faker = new Faker({
 	locale: [pt_BR, pt_PT, en, base],

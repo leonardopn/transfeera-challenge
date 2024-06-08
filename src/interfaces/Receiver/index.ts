@@ -1,8 +1,7 @@
 import { Receiver } from "@prisma/client";
+import { PixKeyType } from "src/constant/PixKeyType";
 
 export type ReceiverStatus = "Rascunho" | "Validado";
-
-export type PixKeyType = "CPF" | "CNPJ" | "EMAIL" | "TELEFONE" | "CHAVE_ALEATORIA";
 
 export interface IReceiver extends Omit<Receiver, "status" | "pix_key_type"> {
 	status: ReceiverStatus;

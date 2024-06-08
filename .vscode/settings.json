@@ -5,6 +5,7 @@
 		"Module: Swagger",
 		"Module: Receiver",
 		"Prisma",
-		"Constant: Regex"
+		"Constant: Regex",
+		"Constant: PixKeyType"
 	]
 }
