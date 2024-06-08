@@ -1,3 +1,8 @@
 {
-	"conventionalCommits.scopes": ["Module: Database", "Module: Env", "Module: Swagger"]
+	"conventionalCommits.scopes": [
+		"Module: Database",
+		"Module: Env",
+		"Module: Swagger",
+		"Module: Receiver"
+	]
 }
