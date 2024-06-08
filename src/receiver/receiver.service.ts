@@ -10,8 +10,14 @@ export class ReceiverService {
 	constructor(private dbService: DatabaseService) {}
 
 	createOne(data: CreateReceiverDto) {
+		const { pix_data, ...restData } = data;
+
 		const newReceiver = this.dbService.receiver.create({
-			data,
+			data: {
+				...restData,
+				pix_key_type: pix_data.pix_key_type,
+				pix_key: pix_data.pix_key,
+			},
 		});
 
 		return newReceiver;

@@ -63,12 +63,12 @@ export class PixDataDto {
 		enum: PIX_KEY_TYPES,
 	})
 	@IsIn(PIX_KEY_TYPES)
-	pix_key_type!: PixKeyType;
+	pix_key_type: PixKeyType;
 
 	@ApiProperty({
 		description: "Pix key",
 	})
 	@MaxLength(140)
 	@Validate(PixKeyValidation)
-	pix_key!: string;
+	pix_key: string;
 }

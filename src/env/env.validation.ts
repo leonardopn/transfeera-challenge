@@ -11,12 +11,12 @@ export enum AppEnvironment {
 
 export class EnvironmentVariables {
 	@IsEnum(AppEnvironment)
-	NODE_ENV!: AppEnvironment;
+	NODE_ENV: AppEnvironment;
 
 	@IsNumber()
 	@Min(0)
 	@Max(65535)
-	PORT!: number;
+	PORT: number;
 }
 
 export function validate(config: Record<string, unknown>) {
