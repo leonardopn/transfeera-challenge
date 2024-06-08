@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber, IsPositive } from "class-validator";
+import { ArrayMinSize, IsNumber, IsPositive } from "class-validator";
 
 export class DeleteManyReceiversDto {
 	@ApiProperty({
@@ -9,5 +9,6 @@ export class DeleteManyReceiversDto {
 	})
 	@IsNumber({}, { each: true })
 	@IsPositive({ each: true })
+	@ArrayMinSize(1)
 	ids: number[];
 }
