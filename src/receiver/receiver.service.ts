@@ -27,4 +27,8 @@ export class ReceiverService {
 
 		return this.dbService.receiver.delete({ where: { id } });
 	}
+
+	async removeMany(ids: number[]) {
+		return this.dbService.receiver.deleteMany({ where: { id: { in: ids } } });
+	}
 }
