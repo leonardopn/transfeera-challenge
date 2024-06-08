@@ -61,7 +61,7 @@ async function main() {
 		return {
 			completed_name: faker.person.fullName(),
 			cpf_cnpj: getRandomNumber(1, 2) === 1 ? generateRandomCPF() : generateRandomCNPJ(),
-			email: faker.internet.email(),
+			email: getRandomNumber(1, 2) === 1 ? faker.internet.email() : "",
 			status: getRandomNumber(1, 2) === 1 ? "Validado" : "Rascunho",
 			pix_key: pix_keys[pix_key].pix_key,
 			pix_key_type: pix_keys[pix_key].pix_key_type,

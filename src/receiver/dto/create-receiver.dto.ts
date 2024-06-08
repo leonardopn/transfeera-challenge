@@ -8,6 +8,7 @@ import {
 	ValidatorConstraintInterface,
 	ValidationArguments,
 	Validate,
+	IsOptional,
 } from "class-validator";
 
 type PixKeyType = "CPF" | "CNPJ" | "EMAIL" | "TELEFONE" | "CHAVE_ALEATORIA";
@@ -61,6 +62,7 @@ export class CreateReceiverDto {
 	})
 	@Matches(/^[a-z0-9+_.-]+@[a-z0-9.-]+$/, { message: a => a.property + ": Invalid email" })
 	@MaxLength(250)
+	@IsOptional()
 	email!: string;
 
 	@ApiProperty({ description: "Receiver name", example: "Jhon Doe", required: true })

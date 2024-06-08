@@ -10,7 +10,7 @@ datasource db {
 model Receiver {
     id             Int      @id @default(autoincrement())
     completed_name String
-    email          String
+    email          String?  @default("")
     cpf_cnpj       String
     status         String   @default("Rascunho")
     pix_key_type   String
