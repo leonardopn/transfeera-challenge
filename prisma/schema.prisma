@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Receiver {
-    id             String @id
+    id             Int    @id @default(autoincrement())
     completed_name String
     email          String
     cpf_cnpj       String
