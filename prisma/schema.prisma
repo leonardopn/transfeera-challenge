@@ -8,11 +8,13 @@ datasource db {
 }
 
 model Receiver {
-    id             Int    @id @default(autoincrement())
+    id             Int      @id @default(autoincrement())
     completed_name String
     email          String
     cpf_cnpj       String
-    status         String @default("Rascunho")
+    status         String   @default("Rascunho")
     pix_key_type   String
     pix_key        String
+    created_at     DateTime @default(now())
+    updated_at     DateTime @default(now())
 }

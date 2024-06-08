@@ -3,6 +3,7 @@
 		"Module: Database",
 		"Module: Env",
 		"Module: Swagger",
-		"Module: Receiver"
+		"Module: Receiver",
+		"Prisma"
 	]
 }
