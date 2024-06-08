@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { DatabaseService } from "src/database/database.service";
 import { CreateReceiverDto } from "./dto/create-receiver.dto";
 
@@ -12,5 +12,19 @@ export class ReceiverService {
 		});
 
 		return newReceiver;
+	}
+
+	getOne(id: number) {
+		return this.dbService.receiver.findUnique({ where: { id } });
+	}
+
+	async removeOne(id: number) {
+		const receiver = await this.getOne(id);
+
+		if (!receiver) {
+			throw new NotFoundException("Receiver not found");
+		}
+
+		return this.dbService.receiver.delete({ where: { id } });
 	}
 }
