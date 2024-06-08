@@ -4,6 +4,7 @@
 		"Module: Env",
 		"Module: Swagger",
 		"Module: Receiver",
-		"Prisma"
+		"Prisma",
+		"Constant: Regex"
 	]
 }

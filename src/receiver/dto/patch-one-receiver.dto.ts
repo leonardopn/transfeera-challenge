@@ -17,6 +17,14 @@ import {
 } from "class-validator";
 import { CreateReceiverDto } from "./create-receiver.dto";
 import { Type } from "class-transformer";
+import {
+	CNPJ_AND_CPF_SCHEMA,
+	CNPJ_SCHEMA,
+	CPF_SCHEMA,
+	EMAIL_SCHEMA,
+	PHONE_NUMBER_SCHEMA,
+	UUID_V4_SCHEMA,
+} from "src/constant/regex";
 
 type PixKeyType = "CPF" | "CNPJ" | "EMAIL" | "TELEFONE" | "CHAVE_ALEATORIA";
 
@@ -27,15 +35,15 @@ export class PixKeyValidation implements ValidatorConstraintInterface {
 
 		switch (pix_key_type) {
 			case "CPF":
-				return /^[0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2}$/.test(text);
+				return CPF_SCHEMA.test(text);
 			case "CNPJ":
-				return /^[0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2}$/.test(text);
+				return CNPJ_SCHEMA.test(text);
 			case "EMAIL":
-				return /^[a-z0-9+_.-]+@[a-z0-9.-]+$/.test(text);
+				return EMAIL_SCHEMA.test(text);
 			case "TELEFONE":
-				return /^((?:\+?55)?)([1-9][0-9])(9[0-9]{8})$/.test(text);
+				return PHONE_NUMBER_SCHEMA.test(text);
 			case "CHAVE_ALEATORIA":
-				return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(text);
+				return UUID_V4_SCHEMA.test(text);
 			default:
 				return false;
 		}
@@ -92,7 +100,7 @@ export class PatchOneReceiverDto {
 		example: "jhon_doe@example.com",
 	})
 	@IsOptional()
-	@Matches(/^[a-z0-9+_.-]+@[a-z0-9.-]+$/, { message: a => a.property + ": Invalid email" })
+	@Matches(EMAIL_SCHEMA, { message: a => a.property + ": Invalid email" })
 	@MaxLength(250)
 	email?: string;
 
@@ -108,10 +116,7 @@ export class PatchOneReceiverDto {
 	})
 	@IsNotEmpty()
 	@IsOptional()
-	@Matches(
-		/^[0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2}$|^[0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2}$/,
-		{ message: a => a.property + ": Invalid CPF or CNPJ" }
-	)
+	@Matches(CNPJ_AND_CPF_SCHEMA, { message: a => a.property + ": Invalid CPF or CNPJ" })
 	cpf_cnpj?: string;
 
 	@ApiProperty({
