@@ -23,6 +23,9 @@
 		"prisma:migrate": "prisma migrate dev",
 		"postinstall": "prisma generate"
 	},
+	"prisma": {
+		"seed": "ts-node prisma/seed.ts"
+	},
 	"dependencies": {
 		"@nestjs/common": "^10.0.0",
 		"@nestjs/config": "^3.2.2",
@@ -34,9 +37,12 @@
 		"class-validator": "^0.14.1",
 		"helmet": "^7.1.0",
 		"reflect-metadata": "^0.2.0",
-		"rxjs": "^7.8.1"
+		"rxjs": "^7.8.1",
+		"toolkit-extra": "^1.1.4"
 	},
 	"devDependencies": {
+		"@faker-js/faker": "^8.4.1",
+		"@js-brasil/fakerbr": "^0.0.2",
 		"@nestjs/cli": "^10.0.0",
 		"@nestjs/schematics": "^10.0.0",
 		"@nestjs/testing": "^10.0.0",
@@ -58,7 +64,7 @@
 		"supertest": "^6.3.3",
 		"ts-jest": "^29.1.0",
 		"ts-loader": "^9.4.3",
-		"ts-node": "^10.9.1",
+		"ts-node": "^10.9.2",
 		"tsconfig-paths": "^4.2.0",
 		"typescript": "^5.1.3"
 	},
