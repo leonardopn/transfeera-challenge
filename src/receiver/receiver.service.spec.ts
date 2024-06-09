@@ -3,8 +3,8 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { IReceiver } from "src/interfaces/Receiver";
 import { DatabaseService } from "../database/database.service";
 import { ReceiverService } from "./receiver.service";
-import { CreateReceiverDto } from "./dto/create-receiver.dto";
-import { PatchOneReceiverDto } from "./dto/patch-one-receiver.dto";
+import { CreateReceiverDto } from "./dto/create-receiver";
+import { PatchOneReceiverDto } from "./dto/patch-one-receiver";
 
 describe("ReceiverService", () => {
 	let receiverService: ReceiverService;

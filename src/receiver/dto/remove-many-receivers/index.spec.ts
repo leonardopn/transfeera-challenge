@@ -1,6 +1,6 @@
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
-import { RemoveManyReceiversDto } from "./remove-many-receivers.dto";
+import { RemoveManyReceiversDto } from ".";
 
 describe("RemoveManyReceiversDto", () => {
 	describe("ids", () => {

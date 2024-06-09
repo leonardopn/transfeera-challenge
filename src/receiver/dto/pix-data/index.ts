@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsDefined, IsIn, IsString, MaxLength, Validate } from "class-validator";
-import { PIX_KEY_TYPES, PixKeyType } from "../../constant/PixKeyType";
-import { PixKeyValidation } from "../validations/pixKey.validation";
+import { PIX_KEY_TYPES, PixKeyType } from "../../../constant/PixKeyType";
+import { PixKeyValidation } from "../../validations/pixKey.validation";
 
 export class PixDataDto {
 	@ApiProperty({

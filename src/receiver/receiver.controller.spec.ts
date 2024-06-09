@@ -2,10 +2,10 @@ import { BadRequestException } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { Prisma, Receiver } from "@prisma/client";
 import { IReceiver } from "src/interfaces/Receiver";
-import { CreateReceiverDto } from "./dto/create-receiver.dto";
-import { PatchOneReceiverDto } from "./dto/patch-one-receiver.dto";
-import { RemoveManyReceiversDto } from "./dto/remove-many-receivers.dto";
-import { SearchReceiversDto } from "./dto/search-recivers.dto";
+import { CreateReceiverDto } from "./dto/create-receiver";
+import { PatchOneReceiverDto } from "./dto/patch-one-receiver";
+import { RemoveManyReceiversDto } from "./dto/remove-many-receivers";
+import { SearchReceiversDto } from "./dto/search-receivers";
 import { ReceiverController } from "./receiver.controller";
 import { ReceiverService } from "./receiver.service";
 

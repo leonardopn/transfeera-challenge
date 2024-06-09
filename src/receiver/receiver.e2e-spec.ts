@@ -10,7 +10,7 @@ import { AppModule } from "../app.module";
 import { DatabaseService } from "../database/database.service";
 import { AppEnvironment } from "../env/env.validation";
 import { IReceiver } from "../interfaces/Receiver";
-import { CreateReceiverDto } from "./dto/create-receiver.dto";
+import { CreateReceiverDto } from "./dto/create-receiver";
 import { ISearchReturn } from "./types/searchReturn";
 
 describe("Receiver Integration Tests", () => {

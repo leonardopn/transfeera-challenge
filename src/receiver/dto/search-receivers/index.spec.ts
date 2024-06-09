@@ -1,6 +1,6 @@
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
-import { SearchReceiversDto } from "./search-recivers.dto";
+import { SearchReceiversDto } from ".";
 
 describe("SearchReceiversDto", () => {
 	describe("q field", () => {

@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException, PreconditionFailedException } from "@nestjs/common";
 import { DatabaseService } from "../database/database.service";
 import { IReceiver, IUpgradeReceiver } from "../interfaces/Receiver";
-import { CreateReceiverDto } from "./dto/create-receiver.dto";
-import { PatchOneReceiverDto } from "./dto/patch-one-receiver.dto";
+import { CreateReceiverDto } from "./dto/create-receiver";
+import { PatchOneReceiverDto } from "./dto/patch-one-receiver";
 import { Prisma } from "@prisma/client";
 import { ISearchReturn } from "./types/searchReturn";
 

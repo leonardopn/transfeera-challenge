@@ -12,10 +12,10 @@ import {
 } from "@nestjs/common";
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { isNegative, isNumber } from "class-validator";
-import { CreateReceiverDto } from "./dto/create-receiver.dto";
-import { RemoveManyReceiversDto } from "./dto/remove-many-receivers.dto";
-import { PatchOneReceiverDto } from "./dto/patch-one-receiver.dto";
-import { SearchReceiversDto } from "./dto/search-recivers.dto";
+import { CreateReceiverDto } from "./dto/create-receiver";
+import { RemoveManyReceiversDto } from "./dto/remove-many-receivers";
+import { PatchOneReceiverDto } from "./dto/patch-one-receiver";
+import { SearchReceiversDto } from "./dto/search-receivers";
 import { ReceiverService } from "./receiver.service";
 
 @Controller("receiver")

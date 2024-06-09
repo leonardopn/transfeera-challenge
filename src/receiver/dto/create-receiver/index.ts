@@ -10,8 +10,8 @@ import {
 	MaxLength,
 	ValidateNested,
 } from "class-validator";
-import { CNPJ_AND_CPF_SCHEMA, UPPERCASE_EMAIL_SCHEMA } from "../../constant/regex";
-import { PixDataDto } from "./pix-data.dto";
+import { CNPJ_AND_CPF_SCHEMA, UPPERCASE_EMAIL_SCHEMA } from "../../../constant/regex";
+import { PixDataDto } from "../pix-data";
 
 export class CreateReceiverDto {
 	@ApiProperty({

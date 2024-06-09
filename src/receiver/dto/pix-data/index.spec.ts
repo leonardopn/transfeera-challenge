@@ -1,6 +1,6 @@
 import { plainToInstance } from "class-transformer";
 import { validate } from "class-validator";
-import { PixDataDto } from "./pix-data.dto";
+import { PixDataDto } from ".";
 import { v4 } from "uuid";
 
 describe("PixDataDto", () => {
