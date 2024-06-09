@@ -1,7 +1,7 @@
-import { EnvironmentVariables } from "./env.validation";
+import { EnvironmentVariablesDto } from "./env.validation";
 
 declare global {
 	namespace NodeJS {
-		interface ProcessEnv extends EnvironmentVariables {}
+		interface ProcessEnv extends EnvironmentVariablesDto {}
 	}
 }

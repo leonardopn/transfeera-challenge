@@ -9,7 +9,7 @@ export enum AppEnvironment {
 	Production = "production",
 }
 
-export class EnvironmentVariables {
+export class EnvironmentVariablesDto {
 	@IsEnum(AppEnvironment)
 	NODE_ENV: AppEnvironment;
 
@@ -20,7 +20,7 @@ export class EnvironmentVariables {
 }
 
 export function validate(config: Record<string, unknown>) {
-	const validatedConfig = plainToInstance(EnvironmentVariables, config, {
+	const validatedConfig = plainToInstance(EnvironmentVariablesDto, config, {
 		enableImplicitConversion: true,
 	});
 
