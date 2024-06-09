@@ -1,4 +1,4 @@
-import { NotFoundException } from "@nestjs/common";
+import { NotFoundException, PreconditionFailedException } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { IReceiver } from "src/interfaces/Receiver";
 import { DatabaseService } from "../database/database.service";
@@ -32,6 +32,8 @@ describe("ReceiverService", () => {
 							delete: jest.fn(),
 							create: jest.fn(),
 							deleteMany: jest.fn(),
+							count: jest.fn(),
+							findMany: jest.fn(),
 						},
 					},
 				},
@@ -148,6 +150,97 @@ describe("ReceiverService", () => {
 				where: { id: { in: ids } },
 			});
 			expect(result).toBe(deleteResult);
+		});
+	});
+
+	describe("search", () => {
+		it("should return search results", async () => {
+			const query = "John";
+			const page = 1;
+			const receivers = [defaultReceiver];
+			const totalCount = receivers.length;
+			const totalPages = 1;
+
+			jest.spyOn(dbService.receiver, "count").mockResolvedValue(totalCount);
+			jest.spyOn(dbService.receiver, "findMany").mockResolvedValue(receivers);
+
+			const result = await receiverService.search(query, page);
+
+			expect(dbService.receiver.count).toHaveBeenCalledWith({
+				where: {
+					OR: [
+						{ status: { contains: query } },
+						{ completed_name: { contains: query } },
+						{ pix_key_type: { contains: query } },
+						{ pix_key: { contains: query } },
+					],
+				},
+			});
+			expect(dbService.receiver.findMany).toHaveBeenCalledWith({
+				where: {
+					OR: [
+						{ status: { contains: query } },
+						{ completed_name: { contains: query } },
+						{ pix_key_type: { contains: query } },
+						{ pix_key: { contains: query } },
+					],
+				},
+				take: 10,
+				skip: 0,
+			});
+			expect(result).toEqual({
+				values: receivers,
+				totalPages,
+				totalCount,
+				quantityPerPage: 10,
+			});
+		});
+
+		it("should return empty results if no receivers found", async () => {
+			const query = "NonExistent";
+			const page = 1;
+			const totalCount = 0;
+			const totalPages = 0;
+
+			jest.spyOn(dbService.receiver, "count").mockResolvedValue(totalCount);
+			jest.spyOn(dbService.receiver, "findMany").mockResolvedValue([]);
+
+			const result = await receiverService.search(query, page);
+
+			expect(dbService.receiver.count).toHaveBeenCalledWith({
+				where: {
+					OR: [
+						{ status: { contains: query } },
+						{ completed_name: { contains: query } },
+						{ pix_key_type: { contains: query } },
+						{ pix_key: { contains: query } },
+					],
+				},
+			});
+			expect(result).toEqual({ values: [], totalPages, totalCount, quantityPerPage: 10 });
+		});
+
+		it("should throw PreconditionFailedException if page exceeds total pages", async () => {
+			const query = "John";
+			const page = 2;
+			const totalCount = 10;
+
+			jest.spyOn(dbService.receiver, "count").mockResolvedValue(totalCount);
+
+			await expect(receiverService.search(query, page)).rejects.toThrow(
+				PreconditionFailedException
+			);
+
+			expect(dbService.receiver.count).toHaveBeenCalledWith({
+				where: {
+					OR: [
+						{ status: { contains: query } },
+						{ completed_name: { contains: query } },
+						{ pix_key_type: { contains: query } },
+						{ pix_key: { contains: query } },
+					],
+				},
+			});
 		});
 	});
 });
