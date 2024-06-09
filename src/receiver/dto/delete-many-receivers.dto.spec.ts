@@ -40,6 +40,15 @@ describe("DeleteManyReceiversDto", () => {
 			expect(errors.length).toBe(1);
 		});
 
+		it("should be invalid if the field isn't an array", async () => {
+			const myBodyObject = { ids: 2 };
+			const myDtoObject = plainToInstance(DeleteManyReceiversDto, myBodyObject);
+
+			const errors = await validate(myDtoObject);
+
+			expect(errors.length).toBe(1);
+		});
+
 		it("should be valid if the field only has positive elements", async () => {
 			const myBodyObject = { ids: [1, 2, 3, 4, 5, 6, 7] };
 			const myDtoObject = plainToInstance(DeleteManyReceiversDto, myBodyObject);
