@@ -11,7 +11,7 @@ import {
 	Min,
 	ValidateNested,
 } from "class-validator";
-import { CNPJ_AND_CPF_SCHEMA, EMAIL_SCHEMA } from "src/constant/regex";
+import { CNPJ_AND_CPF_SCHEMA, EMAIL_SCHEMA } from "../../constant/regex";
 import { PixDataDto } from "../validations/pix.validation";
 
 export class PatchOneReceiverDto {

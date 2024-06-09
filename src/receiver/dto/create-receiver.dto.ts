@@ -9,7 +9,7 @@ import {
 	MaxLength,
 	ValidateNested,
 } from "class-validator";
-import { CNPJ_AND_CPF_SCHEMA, EMAIL_SCHEMA } from "src/constant/regex";
+import { CNPJ_AND_CPF_SCHEMA, EMAIL_SCHEMA } from "../../constant/regex";
 import { PixDataDto } from "../validations/pix.validation";
 
 export class CreateReceiverDto {
@@ -21,7 +21,7 @@ export class CreateReceiverDto {
 	@Matches(EMAIL_SCHEMA, { message: a => a.property + ": Invalid email" })
 	@MaxLength(250)
 	@IsOptional()
-	email: string;
+	email?: string;
 
 	@ApiProperty({ description: "Receiver name", example: "Jhon Doe" })
 	@IsNotEmpty()

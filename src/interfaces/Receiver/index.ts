@@ -1,5 +1,5 @@
 import { Receiver } from "@prisma/client";
-import { PixKeyType } from "src/constant/PixKeyType";
+import { PixKeyType } from "../../constant/PixKeyType";
 
 export type ReceiverStatus = "Rascunho" | "Validado";
 

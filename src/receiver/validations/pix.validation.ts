@@ -14,7 +14,7 @@ import {
 	PHONE_NUMBER_SCHEMA,
 	UUID_V4_SCHEMA,
 } from "../../constant/regex";
-import { PixKeyType, PIX_KEY_TYPES } from "src/constant/PixKeyType";
+import { PixKeyType, PIX_KEY_TYPES } from "../../constant/PixKeyType";
 
 @ValidatorConstraint({ name: "pix_key", async: false })
 class PixKeyValidation implements ValidatorConstraintInterface {
