@@ -38,7 +38,8 @@
 		"helmet": "^7.1.0",
 		"reflect-metadata": "^0.2.0",
 		"rxjs": "^7.8.1",
-		"toolkit-extra": "^1.1.4"
+		"toolkit-extra": "^1.1.4",
+		"uuid": "^10.0.0"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^8.4.1",
@@ -50,6 +51,7 @@
 		"@types/jest": "^29.5.2",
 		"@types/node": "^20.3.1",
 		"@types/supertest": "^6.0.0",
+		"@types/uuid": "^9.0.8",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
 		"@typescript-eslint/parser": "^6.0.0",
 		"eslint": "^8.42.0",
