@@ -34,10 +34,11 @@ export class CreateReceiverDto {
 		description: "Receiver CPF or CNPJ",
 		example: "719.805.580-00 or 53.803.780/0001-74",
 	})
-	@IsNotEmpty()
 	@Matches(CNPJ_AND_CPF_SCHEMA, {
 		message: a => a.property + ": Invalid CPF or CNPJ",
 	})
+	@IsNotEmpty()
+	@IsString()
 	cpf_cnpj: string;
 
 	@ApiProperty({

@@ -97,4 +97,105 @@ describe("CreateReceiverDto", () => {
 			expect(errors.length).toBe(1);
 		});
 	});
+
+	describe("cpf_cnpj", () => {
+		it("should check if the field is empty", async () => {
+			const invalidBodyObject = { cpf_cnpj: "" };
+			const invalidDtoObject = plainToInstance(CreateReceiverDto, invalidBodyObject);
+			const errors = await validate(invalidDtoObject, { skipMissingProperties: true });
+
+			expect(errors.length).toBe(1);
+		});
+		it("should check if the field is not a string", async () => {
+			const invalidBodyObject = { cpf_cnpj: true };
+			const invalidDtoObject = plainToInstance(CreateReceiverDto, invalidBodyObject);
+			const errors = await validate(invalidDtoObject, { skipMissingProperties: true });
+
+			expect(errors.length).toBe(1);
+		});
+
+		it("should check if the field is a correct CPF", async () => {
+			const validInputs = [
+				"111.111.111-11",
+				"222.222.222-22",
+				"333.333.333-33",
+				"444.444.444-44",
+				"98765432109",
+				"87654321098",
+				"01234567890",
+				"54321098765",
+			];
+
+			for (const cpf_cnpj of validInputs) {
+				const validBodyObject = { cpf_cnpj };
+				const validDtoObject = plainToInstance(CreateReceiverDto, validBodyObject);
+				const errors = await validate(validDtoObject, { skipMissingProperties: true });
+
+				expect(errors.length).toBe(0);
+			}
+		});
+
+		it("should check if the field is a wrong CPF", async () => {
+			const validInputs = [
+				"111111111115",
+				"2222222222",
+				"33333333333s",
+				"44444444444-",
+				"-55555555555",
+				"66666666666.",
+				"77777777777.0",
+				"88888888888-9",
+			];
+
+			for (const cpf_cnpj of validInputs) {
+				const validBodyObject = { cpf_cnpj };
+				const validDtoObject = plainToInstance(CreateReceiverDto, validBodyObject);
+				const errors = await validate(validDtoObject, { skipMissingProperties: true });
+
+				expect(errors.length).toBe(1);
+			}
+		});
+
+		it("should check if the field is a correct CNPJ", async () => {
+			const validInputs = [
+				"11111111000111",
+				"22222222000222",
+				"33333333000333",
+				"44444444000444",
+				"11.111111/0001-11",
+				"22.222222/0002-22",
+				"33.333333/0003-33",
+				"44.444444/0004-44",
+			];
+
+			for (const cpf_cnpj of validInputs) {
+				const validBodyObject = { cpf_cnpj };
+				const validDtoObject = plainToInstance(CreateReceiverDto, validBodyObject);
+				const errors = await validate(validDtoObject, { skipMissingProperties: true });
+
+				expect(errors.length).toBe(0);
+			}
+		});
+
+		it("should check if the field is a wrong CNPJ", async () => {
+			const validInputs = [
+				"111111110001112",
+				"22222222000222a",
+				"33333333000333.",
+				"444444440004449",
+				"11.111111/00011",
+				"22.222222/0002-",
+				"33.333333/0003s",
+				"44.444444/0004..",
+			];
+
+			for (const cpf_cnpj of validInputs) {
+				const validBodyObject = { cpf_cnpj };
+				const validDtoObject = plainToInstance(CreateReceiverDto, validBodyObject);
+				const errors = await validate(validDtoObject, { skipMissingProperties: true });
+
+				expect(errors.length).toBe(1);
+			}
+		});
+	});
 });
