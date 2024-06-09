@@ -7,6 +7,17 @@ import { ReceiverService } from "./receiver.service";
 describe("ReceiverService", () => {
 	let receiverService: ReceiverService;
 	let dbService: DatabaseService;
+	const defaultReceiver: IReceiver = {
+		id: 1,
+		completed_name: "John Doe",
+		cpf_cnpj: "12345678900",
+		email: "teste@email.com",
+		pix_key_type: "CPF",
+		pix_key: "111.111.111-11",
+		created_at: new Date(),
+		updated_at: new Date(),
+		status: "Rascunho",
+	};
 
 	beforeEach(async () => {
 		const module: TestingModule = await Test.createTestingModule({
@@ -17,6 +28,7 @@ describe("ReceiverService", () => {
 					useValue: {
 						receiver: {
 							findUnique: jest.fn(),
+							delete: jest.fn(),
 						},
 					},
 				},
@@ -30,22 +42,12 @@ describe("ReceiverService", () => {
 	describe("getOne", () => {
 		it("should return a receiver if found", async () => {
 			const id = 1;
-			const receiver: IReceiver = {
-				id,
-				completed_name: "John Doe",
-				cpf_cnpj: "12345678900",
-				email: "teste@email.com",
-				pix_key_type: "CPF",
-				pix_key: "111.111.111-11",
-				created_at: new Date(),
-				updated_at: new Date(),
-				status: "Rascunho",
-			};
-			jest.spyOn(dbService.receiver, "findUnique").mockResolvedValue(receiver);
+
+			jest.spyOn(dbService.receiver, "findUnique").mockResolvedValue(defaultReceiver);
 
 			const result = await receiverService.getOne(id);
 
-			expect(result).toBe(receiver);
+			expect(result).toBe(defaultReceiver);
 			expect(dbService.receiver.findUnique).toHaveBeenCalledWith({ where: { id } });
 		});
 
@@ -65,6 +67,32 @@ describe("ReceiverService", () => {
 
 			await expect(receiverService.getOne(id, true)).rejects.toThrow(NotFoundException);
 			expect(dbService.receiver.findUnique).toHaveBeenCalledWith({ where: { id } });
+		});
+	});
+
+	describe("removeOne", () => {
+		it("should call getOne and delete the receiver if found", async () => {
+			const id = 1;
+
+			jest.spyOn(receiverService, "getOne").mockResolvedValue(defaultReceiver);
+			jest.spyOn(dbService.receiver, "delete").mockResolvedValue(defaultReceiver);
+
+			const result = await receiverService.removeOne(id);
+
+			expect(receiverService.getOne).toHaveBeenCalledWith(id, true);
+			expect(dbService.receiver.delete).toHaveBeenCalledWith({ where: { id } });
+			expect(result).toBe(defaultReceiver);
+		});
+
+		it("should throw NotFoundException if receiver not found", async () => {
+			const id = 1;
+			jest.spyOn(receiverService, "getOne").mockRejectedValue(
+				new NotFoundException("Receiver not found")
+			);
+
+			await expect(receiverService.removeOne(id)).rejects.toThrow(NotFoundException);
+			expect(receiverService.getOne).toHaveBeenCalledWith(id, true);
+			expect(dbService.receiver.delete).not.toHaveBeenCalled();
 		});
 	});
 });
