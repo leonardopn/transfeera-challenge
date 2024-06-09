@@ -49,7 +49,7 @@ async function main() {
 				pix_key_type: "CNPJ",
 			},
 			EMAIL: {
-				pix_key: faker.internet.email(),
+				pix_key: faker.internet.email().toLowerCase(),
 				pix_key_type: "EMAIL",
 			},
 			TELEFONE: {
