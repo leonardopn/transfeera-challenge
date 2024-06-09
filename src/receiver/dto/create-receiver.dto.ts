@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Type } from "class-transformer";
+import { Transform, Type } from "class-transformer";
 import {
 	IsNotEmpty,
 	IsNotEmptyObject,
@@ -52,5 +52,6 @@ export class CreateReceiverDto {
 	@ValidateNested()
 	@IsNotEmptyObject()
 	@Type(() => PixDataDto)
+	@Transform(({ value }) => (!value ? {} : value))
 	pix_data: PixDataDto;
 }

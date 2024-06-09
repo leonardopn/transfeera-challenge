@@ -198,4 +198,44 @@ describe("CreateReceiverDto", () => {
 			}
 		});
 	});
+
+	describe("pix_data", () => {
+		it("should be invalid for all invalid options", async () => {
+			const validInputs = [
+				{ pix_data: {} },
+				{ pix_data: 1 },
+				{ pix_data: true },
+				{ pix_data: false },
+				{ pix_data: "test" },
+				{ pix_data: null },
+				{ pix_data: undefined },
+			];
+
+			for (const field of validInputs) {
+				const validDtoObject = plainToInstance(CreateReceiverDto, field);
+				const errors = await validate(validDtoObject, { skipMissingProperties: true });
+
+				expect(errors.length).toBe(1);
+			}
+		});
+		it("should be valid for all valid options", async () => {
+			//NOTE: PixDataDto has been tested in pix-data.dto.spec.ts, so this use case only need to test if the data is passed as object
+
+			const validInputs = [
+				{
+					pix_data: {
+						pix_key_type: "CPF",
+						pix_key: "111.111.111-11",
+					},
+				},
+			];
+
+			for (const field of validInputs) {
+				const validDtoObject = plainToInstance(CreateReceiverDto, field);
+				const errors = await validate(validDtoObject, { skipMissingProperties: true });
+
+				expect(errors.length).toBe(0);
+			}
+		});
+	});
 });
