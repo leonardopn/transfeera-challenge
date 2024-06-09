@@ -1,8 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
 import {
-	IsIn,
-	MaxLength,
-	Validate,
 	ValidationArguments,
 	ValidatorConstraint,
 	ValidatorConstraintInterface,
@@ -14,10 +10,10 @@ import {
 	PHONE_NUMBER_SCHEMA,
 	UUID_V4_SCHEMA,
 } from "../../constant/regex";
-import { PixKeyType, PIX_KEY_TYPES } from "../../constant/PixKeyType";
+import { PixKeyType } from "../../constant/PixKeyType";
 
 @ValidatorConstraint({ name: "pix_key", async: false })
-class PixKeyValidation implements ValidatorConstraintInterface {
+export class PixKeyValidation implements ValidatorConstraintInterface {
 	validate(text: string, args: ValidationArguments) {
 		const { pix_key_type } = args.object as { pix_key_type: PixKeyType };
 
@@ -55,20 +51,4 @@ class PixKeyValidation implements ValidatorConstraintInterface {
 				return args.property + ": Invalid PIX Key by type";
 		}
 	}
-}
-
-export class PixDataDto {
-	@ApiProperty({
-		description: "Type of the pix key",
-		enum: PIX_KEY_TYPES,
-	})
-	@IsIn(PIX_KEY_TYPES)
-	pix_key_type: PixKeyType;
-
-	@ApiProperty({
-		description: "Pix key",
-	})
-	@MaxLength(140)
-	@Validate(PixKeyValidation)
-	pix_key: string;
 }

@@ -11,7 +11,7 @@ import {
 	ValidateNested,
 } from "class-validator";
 import { CNPJ_AND_CPF_SCHEMA, UPPERCASE_EMAIL_SCHEMA } from "../../constant/regex";
-import { PixDataDto } from "../validations/pix.validation";
+import { PixDataDto } from "./pix-data.dto";
 
 export class CreateReceiverDto {
 	@ApiProperty({
