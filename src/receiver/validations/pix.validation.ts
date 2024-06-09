@@ -10,7 +10,7 @@ import {
 import {
 	CNPJ_SCHEMA,
 	CPF_SCHEMA,
-	EMAIL_SCHEMA,
+	LOWERCASE_EMAIL_SCHEMA,
 	PHONE_NUMBER_SCHEMA,
 	UUID_V4_SCHEMA,
 } from "../../constant/regex";
@@ -27,7 +27,7 @@ class PixKeyValidation implements ValidatorConstraintInterface {
 			case "CNPJ":
 				return CNPJ_SCHEMA.test(text);
 			case "EMAIL":
-				return EMAIL_SCHEMA.test(text);
+				return LOWERCASE_EMAIL_SCHEMA.test(text);
 			case "TELEFONE":
 				return PHONE_NUMBER_SCHEMA.test(text);
 			case "CHAVE_ALEATORIA":

@@ -9,7 +9,7 @@ import {
 	MaxLength,
 	ValidateNested,
 } from "class-validator";
-import { CNPJ_AND_CPF_SCHEMA, EMAIL_SCHEMA } from "../../constant/regex";
+import { CNPJ_AND_CPF_SCHEMA, UPPERCASE_EMAIL_SCHEMA } from "../../constant/regex";
 import { PixDataDto } from "../validations/pix.validation";
 
 export class CreateReceiverDto {
@@ -18,7 +18,7 @@ export class CreateReceiverDto {
 		example: "jhon_doe@example.com",
 		required: false,
 	})
-	@Matches(EMAIL_SCHEMA, { message: a => a.property + ": Invalid email" })
+	@Matches(UPPERCASE_EMAIL_SCHEMA, { message: a => a.property + ": Invalid email" })
 	@MaxLength(250)
 	@IsOptional()
 	email?: string;

@@ -18,12 +18,17 @@ export const CNPJ_AND_CPF_SCHEMA = new RegExp(
 /**
  * Regex to validate a phone pattern
  */
-export const PHONE_NUMBER_SCHEMA = /^[a-z0-9+_.-]+@[a-z0-9.-]+$/;
+export const PHONE_NUMBER_SCHEMA = /^((?:\+?55)?)([1-9][0-9])(9[0-9]{8})$/;
 
 /**
- * Regex to validate an email pattern
+ * Regex to validate an email pattern (only lowercase)
  */
-export const EMAIL_SCHEMA = /^[a-z0-9+_.-]+@[a-z0-9.-]+$/;
+export const LOWERCASE_EMAIL_SCHEMA = /^[a-z0-9+_.-]+@[a-z0-9.-]+$/;
+
+/**
+ * Regex to validate an email pattern (only uppercase)
+ */
+export const UPPERCASE_EMAIL_SCHEMA = /^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/;
 
 /**
  * Regex to validate an UUID V4 pattern
