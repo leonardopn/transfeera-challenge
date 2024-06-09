@@ -6,6 +6,7 @@ import { IReceiver } from "src/interfaces/Receiver";
 import { SearchReceiversDto } from "./dto/search-recivers.dto";
 import { RemoveManyReceiversDto } from "./dto/remove-many-receivers.dto";
 import { Prisma } from "@prisma/client";
+import { BadRequestException } from "@nestjs/common";
 
 describe("ReceiverController", () => {
 	let receiverController: ReceiverController;
@@ -21,6 +22,7 @@ describe("ReceiverController", () => {
 						createOne: jest.fn(),
 						search: jest.fn(),
 						removeMany: jest.fn(),
+						removeOne: jest.fn(),
 					},
 				},
 			],
@@ -109,6 +111,40 @@ describe("ReceiverController", () => {
 			expect(receiverService.removeMany).toHaveBeenCalledWith(removeManyReceiverDto.ids);
 
 			expect(response).toBe(undefined); //NOTE: This route return nothing (HTTP 204)
+		});
+	});
+
+	describe("removeOne", () => {
+		it("should call receiverService.removeOne with correct data", async () => {
+			jest.spyOn(receiverService, "removeOne").mockResolvedValue({
+				completed_name: "John Doe",
+				cpf_cnpj: "12345678900",
+				email: "teste@email.com",
+				pix_key_type: "CPF",
+				pix_key: "111.111.111-11",
+				created_at: new Date(),
+				updated_at: new Date(),
+				id: 1,
+				status: "Rascunho",
+			});
+
+			const response = await receiverController.removeOne(1);
+
+			expect(receiverService.removeOne).toHaveBeenCalledWith(1);
+
+			expect(response).toBe(undefined); //NOTE: This route return nothing (HTTP 204)
+		});
+
+		it("should throw BadRequestException if id is not a valid number", async () => {
+			const id = "invalid" as any;
+
+			await expect(receiverController.removeOne(id)).rejects.toThrow(BadRequestException);
+		});
+
+		it("should throw BadRequestException if id is a negative number", async () => {
+			const id = -1;
+
+			await expect(receiverController.removeOne(id)).rejects.toThrow(BadRequestException);
 		});
 	});
 });
