@@ -31,6 +31,7 @@ describe("ReceiverService", () => {
 							findUnique: jest.fn(),
 							delete: jest.fn(),
 							create: jest.fn(),
+							deleteMany: jest.fn(),
 						},
 					},
 				},
@@ -131,6 +132,22 @@ describe("ReceiverService", () => {
 				},
 			});
 			expect(result).toBe(newReceiver);
+		});
+	});
+
+	describe("removeMany", () => {
+		it("should delete multiple receivers", async () => {
+			const ids = [1, 2, 3];
+			const deleteResult = { count: ids.length };
+
+			jest.spyOn(dbService.receiver, "deleteMany").mockResolvedValue(deleteResult);
+
+			const result = await receiverService.removeMany(ids);
+
+			expect(dbService.receiver.deleteMany).toHaveBeenCalledWith({
+				where: { id: { in: ids } },
+			});
+			expect(result).toBe(deleteResult);
 		});
 	});
 });
