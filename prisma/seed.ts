@@ -19,7 +19,7 @@ function generateRandomCNPJ() {
 }
 
 function generateRandomCellPhone() {
-	return fakerBr.celular();
+	return "+55" + String(fakerBr.celular()).replace(/\D/g, "");
 }
 
 async function main() {
