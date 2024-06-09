@@ -4,6 +4,8 @@ import { ReceiverService } from "./receiver.service";
 import { CreateReceiverDto } from "./dto/create-receiver.dto";
 import { IReceiver } from "src/interfaces/Receiver";
 import { SearchReceiversDto } from "./dto/search-recivers.dto";
+import { DeleteManyReceiversDto } from "./dto/delete-many-receivers.dto";
+import { Prisma } from "@prisma/client";
 
 describe("ReceiverController", () => {
 	let receiverController: ReceiverController;
@@ -18,6 +20,7 @@ describe("ReceiverController", () => {
 					useValue: {
 						createOne: jest.fn(),
 						search: jest.fn(),
+						removeMany: jest.fn(),
 					},
 				},
 			],
@@ -86,6 +89,26 @@ describe("ReceiverController", () => {
 			expect(receiverService.createOne).toHaveBeenCalledWith(createReceiverDto);
 
 			expect(response).toBe(result);
+		});
+	});
+
+	describe("removeMany", () => {
+		it("should call receiverService.removeMany with correct data", async () => {
+			const removeManyReceiverDto: DeleteManyReceiversDto = {
+				ids: [1, 2, 3, 4, 5],
+			};
+
+			const result: Prisma.BatchPayload = {
+				count: removeManyReceiverDto.ids.length,
+			};
+
+			jest.spyOn(receiverService, "removeMany").mockResolvedValue(result);
+
+			const response = await receiverController.removeMany(removeManyReceiverDto);
+
+			expect(receiverService.removeMany).toHaveBeenCalledWith(removeManyReceiverDto.ids);
+
+			expect(response).toBe(undefined); //NOTE: This route return nothing (HTTP 204)
 		});
 	});
 });
