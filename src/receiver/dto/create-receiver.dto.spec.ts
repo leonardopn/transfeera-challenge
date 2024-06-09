@@ -27,9 +27,9 @@ describe("CreateReceiverDto", () => {
 		const invalidEmails = ["", "test", "test@", "bC6P1@example.com", "a@gmail.com"];
 
 		for (const email of invalidEmails) {
-			const invalidBodyObject1 = { email };
-			const invalidDtoObject1 = plainToInstance(CreateReceiverDto, invalidBodyObject1);
-			const errors = await validate(invalidDtoObject1, { skipMissingProperties: true });
+			const invalidBodyObject = { email };
+			const invalidDtoObject = plainToInstance(CreateReceiverDto, invalidBodyObject);
+			const errors = await validate(invalidDtoObject, { skipMissingProperties: true });
 
 			expect(errors.length).toBe(1);
 		}
@@ -62,11 +62,29 @@ describe("CreateReceiverDto", () => {
 		];
 
 		for (const email of validEmails) {
-			const validBodyObject1 = { email };
-			const validDtoObject1 = plainToInstance(CreateReceiverDto, validBodyObject1);
-			const errors = await validate(validDtoObject1, { skipMissingProperties: true });
+			const validBodyObject = { email };
+			const validDtoObject = plainToInstance(CreateReceiverDto, validBodyObject);
+			const errors = await validate(validDtoObject, { skipMissingProperties: true });
 
 			expect(errors.length).toBe(0);
 		}
+	});
+
+	describe("completed_name", () => {
+		it("should check if the field is empty", async () => {
+			const invalidBodyObject = { completed_name: "" };
+			const invalidDtoObject = plainToInstance(CreateReceiverDto, invalidBodyObject);
+			const errors = await validate(invalidDtoObject, { skipMissingProperties: true });
+
+			expect(errors.length).toBe(1);
+		});
+
+		it("should check if the field is not a string", async () => {
+			const invalidBodyObject = { completed_name: 3 };
+			const invalidDtoObject = plainToInstance(CreateReceiverDto, invalidBodyObject);
+			const errors = await validate(invalidDtoObject, { skipMissingProperties: true });
+
+			expect(errors.length).toBe(1);
+		});
 	});
 });

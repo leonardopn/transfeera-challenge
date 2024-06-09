@@ -5,6 +5,7 @@ import {
 	IsNotEmptyObject,
 	IsObject,
 	IsOptional,
+	IsString,
 	Matches,
 	MaxLength,
 	ValidateNested,
@@ -25,6 +26,7 @@ export class CreateReceiverDto {
 
 	@ApiProperty({ description: "Receiver name", example: "Jhon Doe" })
 	@IsNotEmpty()
+	@IsString()
 	completed_name: string;
 
 	@ApiProperty({
