@@ -7,5 +7,6 @@
 		"Prisma",
 		"Constant: Regex",
 		"Constant: PixKeyType"
-	]
+	],
+	"typescript.tsdk": "node_modules/typescript/lib"
 }

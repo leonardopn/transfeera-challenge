@@ -23,6 +23,7 @@ function generateRandomCellPhone() {
 }
 
 async function main() {
+	console.log(process.env.DATABASE_URL);
 	const receiversToCreate: Prisma.ReceiverCreateManyInput[] = new Array(30).fill(0).map(() => {
 		const pix_key_options: PixKeyType[] = [
 			"CPF",

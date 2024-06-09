@@ -31,6 +31,7 @@ export class ReceiverController {
 
 	@Post()
 	@ApiOperation({ summary: "Create a new receiver" })
+	@HttpCode(201)
 	createOne(@Body() data: CreateReceiverDto) {
 		return this.receiverService.createOne(data);
 	}

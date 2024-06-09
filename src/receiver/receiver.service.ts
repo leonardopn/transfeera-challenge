@@ -4,15 +4,16 @@ import { IReceiver, IUpgradeReceiver } from "../interfaces/Receiver";
 import { CreateReceiverDto } from "./dto/create-receiver.dto";
 import { PatchOneReceiverDto } from "./dto/patch-one-receiver.dto";
 import { Prisma } from "@prisma/client";
+import { ISearchReturn } from "./types/searchReturn";
 
 @Injectable()
 export class ReceiverService {
 	constructor(private dbService: DatabaseService) {}
 
-	createOne(data: CreateReceiverDto) {
+	async createOne(data: CreateReceiverDto): Promise<IReceiver> {
 		const { pix_data, ...restData } = data;
 
-		const newReceiver = this.dbService.receiver.create({
+		const newReceiver = await this.dbService.receiver.create({
 			data: {
 				...restData,
 				pix_key_type: pix_data.pix_key_type,
@@ -20,7 +21,7 @@ export class ReceiverService {
 			},
 		});
 
-		return newReceiver;
+		return newReceiver as IReceiver;
 	}
 
 	async getOne<T extends boolean = false>(id: number, throwError?: T) {
@@ -74,7 +75,7 @@ export class ReceiverService {
 		});
 	}
 
-	async search(query: string, page: number) {
+	async search(query: string, page: number): Promise<ISearchReturn> {
 		//NOTE: Define the quantity per page
 		const quantityPerPage = 10;
 
@@ -106,11 +107,11 @@ export class ReceiverService {
 		const skip = (page - 1) * quantityPerPage;
 
 		//NOTE: Get the values
-		const values = await this.dbService.receiver.findMany({
+		const values = (await this.dbService.receiver.findMany({
 			where,
 			take: quantityPerPage,
 			skip,
-		});
+		})) as IReceiver[];
 
 		//NOTE: Return the values, total pages, total count and quantity per page
 		return { values, totalPages, totalCount, quantityPerPage };

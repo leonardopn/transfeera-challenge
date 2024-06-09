@@ -15,7 +15,9 @@ export class SearchReceiversDto {
 
 	@IsNumber()
 	@Min(1)
-	@Transform(({ value }) => (isDefined(value) ? Number(value) : 1))
+	@Transform(({ value }) => {
+		return isDefined(value) ? Number(value) : 1;
+	})
 	@IsOptional()
 	@ApiProperty({
 		description: "Page number to get receivers",
