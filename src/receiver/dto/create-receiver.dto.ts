@@ -22,6 +22,7 @@ export class CreateReceiverDto {
 	@Matches(UPPERCASE_EMAIL_SCHEMA, { message: a => a.property + ": Invalid email" })
 	@MaxLength(250)
 	@IsOptional()
+	@IsString()
 	email?: string;
 
 	@ApiProperty({ description: "Receiver name", example: "Jhon Doe" })
