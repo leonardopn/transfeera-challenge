@@ -27,9 +27,11 @@ export class PatchOneReceiverDto {
 
 	@ApiProperty({
 		description: "Receiver email",
-		example: "jhon_doe@example.com",
+		example: "JHON_DOE@EXAMPLE.COM",
 	})
-	@Matches(UPPERCASE_EMAIL_SCHEMA, { message: a => a.property + ": Invalid email" })
+	@Matches(UPPERCASE_EMAIL_SCHEMA, {
+		message: a => a.property + ": Invalid email. Format: 'A@B.COM'",
+	})
 	@MaxLength(250)
 	email?: string;
 
@@ -41,13 +43,15 @@ export class PatchOneReceiverDto {
 
 	@ApiProperty({
 		description: "Receiver CPF or CNPJ",
-
 		example: "719.805.580-00 or 53.803.780/0001-74",
 	})
 	@IsNotEmpty()
 	@IsOptional()
 	@IsString()
-	@Matches(CNPJ_AND_CPF_SCHEMA, { message: a => a.property + ": Invalid CPF or CNPJ" })
+	@Matches(CNPJ_AND_CPF_SCHEMA, {
+		message: a =>
+			a.property + ": Invalid CPF or CNPJ. Format: XXX.XXX.XXX-XX or XX.XXX.XXX/XXXX-XX",
+	})
 	cpf_cnpj?: string;
 
 	@ApiProperty({

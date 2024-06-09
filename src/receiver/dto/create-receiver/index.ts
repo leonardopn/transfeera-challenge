@@ -16,10 +16,12 @@ import { PixDataDto } from "../pix-data";
 export class CreateReceiverDto {
 	@ApiProperty({
 		description: "Receiver email",
-		example: "jhon_doe@example.com",
+		example: "JHON_DOE@EXAMPLE.COM",
 		required: false,
 	})
-	@Matches(UPPERCASE_EMAIL_SCHEMA, { message: a => a.property + ": Invalid email" })
+	@Matches(UPPERCASE_EMAIL_SCHEMA, {
+		message: a => a.property + ": Invalid email. Use format: JHON_DOE@EXAMPLE.COM",
+	})
 	@MaxLength(250)
 	@IsOptional()
 	@IsString()
@@ -35,7 +37,9 @@ export class CreateReceiverDto {
 		example: "719.805.580-00 or 53.803.780/0001-74",
 	})
 	@Matches(CNPJ_AND_CPF_SCHEMA, {
-		message: a => a.property + ": Invalid CPF or CNPJ",
+		message: a =>
+			a.property +
+			": Invalid CPF or CNPJ. Use the formats: XXX.XXX.XXX-XX or XX.XXX.XXX/XXXX-XX",
 	})
 	@IsNotEmpty()
 	@IsString()
