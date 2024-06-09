@@ -13,7 +13,7 @@ import {
 import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { isNegative, isNumber } from "class-validator";
 import { CreateReceiverDto } from "./dto/create-receiver.dto";
-import { DeleteManyReceiversDto } from "./dto/delete-many-receivers.dto";
+import { RemoveManyReceiversDto } from "./dto/remove-many-receivers.dto";
 import { PatchOneReceiverDto } from "./dto/patch-one-receiver.dto";
 import { SearchReceiversDto } from "./dto/search-recivers.dto";
 import { ReceiverService } from "./receiver.service";
@@ -55,7 +55,7 @@ export class ReceiverController {
 	@Delete()
 	@ApiOperation({ summary: "Delete many receivers" })
 	@HttpCode(204)
-	async removeMany(@Body() data: DeleteManyReceiversDto) {
+	async removeMany(@Body() data: RemoveManyReceiversDto) {
 		await this.receiverService.removeMany(data.ids);
 	}
 }

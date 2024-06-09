@@ -4,7 +4,7 @@ import { ReceiverService } from "./receiver.service";
 import { CreateReceiverDto } from "./dto/create-receiver.dto";
 import { IReceiver } from "src/interfaces/Receiver";
 import { SearchReceiversDto } from "./dto/search-recivers.dto";
-import { DeleteManyReceiversDto } from "./dto/delete-many-receivers.dto";
+import { RemoveManyReceiversDto } from "./dto/remove-many-receivers.dto";
 import { Prisma } from "@prisma/client";
 
 describe("ReceiverController", () => {
@@ -94,7 +94,7 @@ describe("ReceiverController", () => {
 
 	describe("removeMany", () => {
 		it("should call receiverService.removeMany with correct data", async () => {
-			const removeManyReceiverDto: DeleteManyReceiversDto = {
+			const removeManyReceiverDto: RemoveManyReceiversDto = {
 				ids: [1, 2, 3, 4, 5],
 			};
 
