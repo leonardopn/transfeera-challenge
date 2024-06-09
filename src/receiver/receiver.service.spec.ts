@@ -3,6 +3,7 @@ import { Test, TestingModule } from "@nestjs/testing";
 import { IReceiver } from "src/interfaces/Receiver";
 import { DatabaseService } from "../database/database.service";
 import { ReceiverService } from "./receiver.service";
+import { CreateReceiverDto } from "./dto/create-receiver.dto";
 
 describe("ReceiverService", () => {
 	let receiverService: ReceiverService;
@@ -29,6 +30,7 @@ describe("ReceiverService", () => {
 						receiver: {
 							findUnique: jest.fn(),
 							delete: jest.fn(),
+							create: jest.fn(),
 						},
 					},
 				},
@@ -93,6 +95,42 @@ describe("ReceiverService", () => {
 			await expect(receiverService.removeOne(id)).rejects.toThrow(NotFoundException);
 			expect(receiverService.getOne).toHaveBeenCalledWith(id, true);
 			expect(dbService.receiver.delete).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("createOne", () => {
+		it("should create a new receiver", async () => {
+			const createReceiverDto: CreateReceiverDto = {
+				completed_name: "Jane Doe",
+				cpf_cnpj: "09876543210",
+				email: "jane@email.com",
+				pix_data: {
+					pix_key_type: "CPF",
+					pix_key: "222.222.222-22",
+				},
+			};
+
+			const newReceiver: IReceiver = {
+				...defaultReceiver,
+				...createReceiverDto,
+				pix_key_type: createReceiverDto.pix_data.pix_key_type,
+				pix_key: createReceiverDto.pix_data.pix_key,
+			};
+
+			jest.spyOn(dbService.receiver, "create").mockResolvedValue(newReceiver);
+
+			const result = await receiverService.createOne(createReceiverDto);
+
+			expect(dbService.receiver.create).toHaveBeenCalledWith({
+				data: {
+					completed_name: createReceiverDto.completed_name,
+					cpf_cnpj: createReceiverDto.cpf_cnpj,
+					email: createReceiverDto.email,
+					pix_key_type: createReceiverDto.pix_data.pix_key_type,
+					pix_key: createReceiverDto.pix_data.pix_key,
+				},
+			});
+			expect(result).toBe(newReceiver);
 		});
 	});
 });
