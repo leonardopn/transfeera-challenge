@@ -4,6 +4,7 @@ import { IReceiver } from "src/interfaces/Receiver";
 import { DatabaseService } from "../database/database.service";
 import { ReceiverService } from "./receiver.service";
 import { CreateReceiverDto } from "./dto/create-receiver.dto";
+import { PatchOneReceiverDto } from "./dto/patch-one-receiver.dto";
 
 describe("ReceiverService", () => {
 	let receiverService: ReceiverService;
@@ -34,6 +35,7 @@ describe("ReceiverService", () => {
 							deleteMany: jest.fn(),
 							count: jest.fn(),
 							findMany: jest.fn(),
+							update: jest.fn(),
 						},
 					},
 				},
@@ -241,6 +243,106 @@ describe("ReceiverService", () => {
 					],
 				},
 			});
+		});
+	});
+
+	describe("patchOne", () => {
+		it('should update the receiver if found and status is not "Validado"', async () => {
+			const patchData: PatchOneReceiverDto = {
+				id: 1,
+				completed_name: "John Doe Updated",
+				cpf_cnpj: "12345678900",
+				email: "teste_updated@email.com",
+				pix_data: {
+					pix_key_type: "CPF",
+					pix_key: "222.222.222-22",
+				},
+			};
+
+			const updatedReceiver: IReceiver = {
+				...defaultReceiver,
+				...patchData,
+				pix_key_type: patchData?.pix_data?.pix_key_type || defaultReceiver.pix_key_type,
+				pix_key: patchData.pix_data?.pix_key || defaultReceiver.pix_key,
+			};
+
+			jest.spyOn(receiverService, "getOne").mockResolvedValue(defaultReceiver);
+			jest.spyOn(dbService.receiver, "update").mockResolvedValue(updatedReceiver);
+
+			const result = await receiverService.patchOne(patchData);
+
+			expect(receiverService.getOne).toHaveBeenCalledWith(patchData.id, true);
+			expect(dbService.receiver.update).toHaveBeenCalledWith({
+				where: { id: patchData.id },
+				data: {
+					id: patchData.id,
+					completed_name: patchData.completed_name,
+					cpf_cnpj: patchData.cpf_cnpj,
+					email: patchData.email,
+					pix_key_type: patchData?.pix_data?.pix_key_type || defaultReceiver.pix_key_type,
+					pix_key: patchData.pix_data?.pix_key || defaultReceiver.pix_key,
+				},
+			});
+			expect(result).toBe(updatedReceiver);
+		});
+
+		it('should update only email if status is "Validado"', async () => {
+			const patchData: PatchOneReceiverDto = {
+				id: 1,
+				completed_name: "John Doe Updated",
+				cpf_cnpj: "12345678900",
+				email: "teste_updated@email.com",
+				pix_data: {
+					pix_key_type: "CPF",
+					pix_key: "222.222.222-22",
+				},
+			};
+
+			const foundReceiverWithStatus: IReceiver = {
+				...defaultReceiver,
+				status: "Validado",
+			};
+
+			const updatedReceiver: IReceiver = {
+				...foundReceiverWithStatus,
+				email: patchData.email || foundReceiverWithStatus.email,
+			};
+
+			jest.spyOn(receiverService, "getOne").mockResolvedValue(foundReceiverWithStatus);
+			jest.spyOn(dbService.receiver, "update").mockResolvedValue(updatedReceiver);
+
+			const result = await receiverService.patchOne(patchData);
+
+			expect(receiverService.getOne).toHaveBeenCalledWith(patchData.id, true);
+			expect(dbService.receiver.update).toHaveBeenCalledWith({
+				where: { id: patchData.id },
+				data: {
+					id: patchData.id,
+					email: patchData.email,
+				},
+			});
+			expect(result).toBe(updatedReceiver);
+		});
+
+		it("should throw NotFoundException if receiver not found", async () => {
+			const patchData: PatchOneReceiverDto = {
+				id: 1,
+				completed_name: "John Doe Updated",
+				cpf_cnpj: "12345678900",
+				email: "teste_updated@email.com",
+				pix_data: {
+					pix_key_type: "CPF",
+					pix_key: "222.222.222-22",
+				},
+			};
+
+			jest.spyOn(receiverService, "getOne").mockRejectedValue(
+				new NotFoundException("Receiver not found")
+			);
+
+			await expect(receiverService.patchOne(patchData)).rejects.toThrow(NotFoundException);
+			expect(receiverService.getOne).toHaveBeenCalledWith(patchData.id, true);
+			expect(dbService.receiver.update).not.toHaveBeenCalled();
 		});
 	});
 });
