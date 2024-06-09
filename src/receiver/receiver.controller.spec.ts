@@ -1,12 +1,13 @@
+import { BadRequestException } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
+import { Prisma, Receiver } from "@prisma/client";
+import { IReceiver } from "src/interfaces/Receiver";
+import { CreateReceiverDto } from "./dto/create-receiver.dto";
+import { PatchOneReceiverDto } from "./dto/patch-one-receiver.dto";
+import { RemoveManyReceiversDto } from "./dto/remove-many-receivers.dto";
+import { SearchReceiversDto } from "./dto/search-recivers.dto";
 import { ReceiverController } from "./receiver.controller";
 import { ReceiverService } from "./receiver.service";
-import { CreateReceiverDto } from "./dto/create-receiver.dto";
-import { IReceiver } from "src/interfaces/Receiver";
-import { SearchReceiversDto } from "./dto/search-recivers.dto";
-import { RemoveManyReceiversDto } from "./dto/remove-many-receivers.dto";
-import { Prisma } from "@prisma/client";
-import { BadRequestException } from "@nestjs/common";
 
 describe("ReceiverController", () => {
 	let receiverController: ReceiverController;
@@ -23,6 +24,7 @@ describe("ReceiverController", () => {
 						search: jest.fn(),
 						removeMany: jest.fn(),
 						removeOne: jest.fn(),
+						patchOne: jest.fn(),
 					},
 				},
 			],
@@ -145,6 +147,40 @@ describe("ReceiverController", () => {
 			const id = -1;
 
 			await expect(receiverController.removeOne(id)).rejects.toThrow(BadRequestException);
+		});
+	});
+
+	describe("patchOne", () => {
+		it("should call receiverService.patchOne with correct data", async () => {
+			const patchOneReceiverDto: PatchOneReceiverDto = {
+				id: 1,
+				completed_name: "New Name",
+				cpf_cnpj: "12345678901",
+				email: "newemail@example.com",
+				pix_data: {
+					pix_key_type: "CPF",
+					pix_key: "12345678901",
+				},
+			};
+
+			const result: Receiver = {
+				id: patchOneReceiverDto.id,
+				completed_name: "New Name",
+				cpf_cnpj: "12345678901",
+				email: "newemail@example.com",
+				pix_key_type: "CPF",
+				pix_key: "12345678901",
+				status: "Rascunho",
+				created_at: new Date(),
+				updated_at: new Date(),
+			};
+
+			jest.spyOn(receiverService, "patchOne").mockResolvedValue(result);
+
+			const response = await receiverController.patchOne(patchOneReceiverDto);
+
+			expect(receiverService.patchOne).toHaveBeenCalledWith(patchOneReceiverDto);
+			expect(response).toBe(result);
 		});
 	});
 });
