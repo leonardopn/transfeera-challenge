@@ -6,6 +6,7 @@ import {
 	IsObject,
 	IsOptional,
 	IsPositive,
+	IsString,
 	Matches,
 	MaxLength,
 	Min,
@@ -28,13 +29,13 @@ export class PatchOneReceiverDto {
 		description: "Receiver email",
 		example: "jhon_doe@example.com",
 	})
-	@IsOptional()
 	@Matches(UPPERCASE_EMAIL_SCHEMA, { message: a => a.property + ": Invalid email" })
 	@MaxLength(250)
 	email?: string;
 
 	@ApiProperty({ description: "Receiver name", example: "Jhon Doe" })
 	@IsNotEmpty()
+	@IsString()
 	@IsOptional()
 	completed_name?: string;
 
@@ -45,6 +46,7 @@ export class PatchOneReceiverDto {
 	})
 	@IsNotEmpty()
 	@IsOptional()
+	@IsString()
 	@Matches(CNPJ_AND_CPF_SCHEMA, { message: a => a.property + ": Invalid CPF or CNPJ" })
 	cpf_cnpj?: string;
 
