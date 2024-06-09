@@ -3,6 +3,7 @@ import { ReceiverController } from "./receiver.controller";
 import { ReceiverService } from "./receiver.service";
 import { CreateReceiverDto } from "./dto/create-receiver.dto";
 import { IReceiver } from "src/interfaces/Receiver";
+import { SearchReceiversDto } from "./dto/search-recivers.dto";
 
 describe("ReceiverController", () => {
 	let receiverController: ReceiverController;
@@ -16,6 +17,7 @@ describe("ReceiverController", () => {
 					provide: ReceiverService,
 					useValue: {
 						createOne: jest.fn(),
+						search: jest.fn(),
 					},
 				},
 			],
@@ -23,6 +25,33 @@ describe("ReceiverController", () => {
 
 		receiverController = module.get<ReceiverController>(ReceiverController);
 		receiverService = module.get<ReceiverService>(ReceiverService);
+	});
+
+	describe("search", () => {
+		it("should call receiverService.search with correct data", async () => {
+			const searchReceiverDto: SearchReceiversDto = {
+				page: 1,
+				q: "test",
+			};
+
+			const result = {
+				values: [],
+				totalPages: 0,
+				totalCount: 0,
+				quantityPerPage: 10,
+			};
+
+			jest.spyOn(receiverService, "search").mockResolvedValue(result);
+
+			const response = await receiverController.search(searchReceiverDto);
+
+			expect(receiverService.search).toHaveBeenCalledWith(
+				searchReceiverDto.q,
+				searchReceiverDto.page
+			);
+
+			expect(response).toBe(result);
+		});
 	});
 
 	describe("createOne", () => {
@@ -49,6 +78,7 @@ describe("ReceiverController", () => {
 				email: restData.email || "",
 				...restData,
 			};
+
 			jest.spyOn(receiverService, "createOne").mockResolvedValue(result);
 
 			const response = await receiverController.createOne(createReceiverDto);
