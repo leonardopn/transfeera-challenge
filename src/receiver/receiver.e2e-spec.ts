@@ -1,14 +1,12 @@
-import { INestApplication, ValidationPipe } from "@nestjs/common";
+import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { exec } from "child_process";
 import { unlink } from "fs/promises";
-import helmet from "helmet";
 import { join } from "path";
+import { applyNestMainConfig } from "../config/Nest";
 import * as request from "supertest";
-import {} from "../../prisma/seed";
 import { AppModule } from "../app.module";
 import { DatabaseService } from "../database/database.service";
-import { AppEnvironment } from "../env/env.validation";
 import { IReceiver } from "../interfaces/IReceiver";
 import { CreateReceiverDto } from "./dto/create-receiver";
 import { SearchServiceReturn } from "./types/searchReturn";
@@ -24,20 +22,8 @@ describe("Receiver Integration Tests", () => {
 
 		app = moduleFixture.createNestApplication();
 
-		//SECTION: Helmet config
-		app.use(helmet());
-
-		//SECTION: Cors config
-		app.enableCors();
-
-		//SECTION: Global validation
-		app.useGlobalPipes(
-			new ValidationPipe({
-				whitelist: true,
-				transform: true,
-				enableDebugMessages: process.env.NODE_ENV !== AppEnvironment.Production,
-			})
-		);
+		//NOTE: Apply Nest main config
+		applyNestMainConfig(app);
 
 		await app.init();
 
