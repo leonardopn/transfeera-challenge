@@ -146,6 +146,56 @@ describe("Receiver Integration Tests", () => {
 		await request(app.getHttpServer()).delete(`/receiver/${createdReceiver.id}`).expect(204);
 	});
 
+	it("should paginate receivers", async () => {
+		const totalReceivers = 30; //NOTE: Assuming the database starts with 30 receivers
+		const limit = 10;
+
+		//NOTE: Verify pagination - first page
+		const firstPageResponse = await request(app.getHttpServer())
+			.get(`/receiver?limit=${limit}&page=1`)
+			.expect(200);
+
+		const firstPageReceivers = firstPageResponse.body as SearchServiceReturn;
+
+		expect(firstPageReceivers.values.length).toBe(limit);
+		expect(firstPageReceivers.totalCount).toBe(totalReceivers);
+
+		//NOTE: Verify pagination - second page
+		const secondPageResponse = await request(app.getHttpServer())
+			.get(`/receiver?limit=${limit}&page=2`)
+			.expect(200);
+
+		const secondPageReceivers = secondPageResponse.body as SearchServiceReturn;
+
+		expect(secondPageReceivers.values.length).toBe(limit);
+		expect(secondPageReceivers.totalCount).toBe(totalReceivers);
+
+		//NOTE: Verify pagination - third page
+		const thirdPageResponse = await request(app.getHttpServer())
+			.get(`/receiver?limit=${limit}&page=3`)
+			.expect(200);
+
+		const thirdPageReceivers = thirdPageResponse.body as SearchServiceReturn;
+
+		expect(thirdPageReceivers.values.length).toBe(totalReceivers - 2 * limit);
+		expect(thirdPageReceivers.totalCount).toBe(totalReceivers);
+
+		//NOTE: Verify pagination - fourth page - should return an error
+		await request(app.getHttpServer()).get(`/receiver?limit=${limit}&page=4`).expect(412);
+
+		//NOTE: Verify an empty page
+		await request(app.getHttpServer())
+			.get(`/receiver?q=NOT_FOUND&limit=${limit}`)
+			.expect(200)
+			.then(response => {
+				const responseBody = response.body as SearchServiceReturn;
+				expect(responseBody.totalCount).toBe(0);
+				expect(responseBody.totalPages).toBe(0);
+				expect(responseBody.quantityPerPage).toBe(10);
+				expect(responseBody.values.length).toBe(0);
+			});
+	});
+
 	afterAll(async () => {
 		//NOTE: After all tests, delete the test database and close the app
 		await unlink(join(__dirname, "../../prisma/database/index_test.db"));
