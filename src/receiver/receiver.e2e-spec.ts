@@ -9,9 +9,9 @@ import {} from "../../prisma/seed";
 import { AppModule } from "../app.module";
 import { DatabaseService } from "../database/database.service";
 import { AppEnvironment } from "../env/env.validation";
-import { IReceiver } from "../interfaces/Receiver";
+import { IReceiver } from "../interfaces/IReceiver";
 import { CreateReceiverDto } from "./dto/create-receiver";
-import { ISearchReturn } from "./types/searchReturn";
+import { SearchServiceReturn } from "./types/searchReturn";
 
 describe("Receiver Integration Tests", () => {
 	let app: INestApplication;
@@ -86,7 +86,7 @@ describe("Receiver Integration Tests", () => {
 			.get(searchUrl)
 			.expect(200)
 			.then(response => {
-				const responseBody = response.body as ISearchReturn;
+				const responseBody = response.body as SearchServiceReturn;
 
 				expect(responseBody.values.find(r => r.id === createdReceiver.id)?.id).toBe(
 					createdReceiver.id
@@ -101,7 +101,7 @@ describe("Receiver Integration Tests", () => {
 			.get(searchUrl)
 			.expect(200)
 			.then(response => {
-				const responseBody = response.body as ISearchReturn;
+				const responseBody = response.body as SearchServiceReturn;
 
 				expect(responseBody.values.find(r => r.id === createdReceiver.id)?.id).not.toBe(
 					createdReceiver.id

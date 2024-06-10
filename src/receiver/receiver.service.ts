@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException, PreconditionFailedException } from "@nestjs/common";
 import { DatabaseService } from "../database/database.service";
-import { IReceiver, IUpgradeReceiver } from "../interfaces/Receiver";
+import { IReceiver, IUpgradeReceiver } from "../interfaces/IReceiver";
 import { CreateReceiverDto } from "./dto/create-receiver";
 import { PatchOneReceiverDto } from "./dto/patch-one-receiver";
 import { Prisma } from "@prisma/client";
-import { ISearchReturn } from "./types/searchReturn";
+import { SearchServiceReturn } from "./types/searchReturn";
 
 @Injectable()
 export class ReceiverService {
@@ -75,7 +75,7 @@ export class ReceiverService {
 		});
 	}
 
-	async search(query: string, page: number): Promise<ISearchReturn> {
+	async search(query: string, page: number): Promise<SearchServiceReturn> {
 		//NOTE: Define the quantity per page
 		const quantityPerPage = 10;
 

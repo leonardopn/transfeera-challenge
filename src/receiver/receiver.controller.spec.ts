@@ -1,7 +1,7 @@
 import { BadRequestException } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import { Prisma, Receiver } from "@prisma/client";
-import { IReceiver } from "src/interfaces/Receiver";
+import { IReceiver } from "../interfaces/IReceiver";
 import { CreateReceiverDto } from "./dto/create-receiver";
 import { PatchOneReceiverDto } from "./dto/patch-one-receiver";
 import { RemoveManyReceiversDto } from "./dto/remove-many-receivers";

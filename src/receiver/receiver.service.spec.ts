@@ -1,6 +1,6 @@
 import { NotFoundException, PreconditionFailedException } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
-import { IReceiver } from "src/interfaces/Receiver";
+import { IReceiver } from "../interfaces/IReceiver";
 import { DatabaseService } from "../database/database.service";
 import { ReceiverService } from "./receiver.service";
 import { CreateReceiverDto } from "./dto/create-receiver";
