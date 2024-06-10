@@ -75,6 +75,9 @@
 		"setupFilesAfterEnv": [
 			"./config/jest/jest.setup.ts"
 		],
+		"modulePathIgnorePatterns": [
+			"e2e"
+		],
 		"moduleFileExtensions": [
 			"js",
 			"json",
