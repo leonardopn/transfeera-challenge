@@ -96,7 +96,47 @@ describe("Receiver Integration Tests", () => {
 			});
 	});
 
-	it("should update a receiver partially (Rascunho)", async () => {
+	it("should update only the email of a validated receiver (Receiver Validado)", async () => {
+		//NOTE: Search for a receiver with status "Validado"
+		const searchUrl = `/receiver?${new URLSearchParams("q=Validado").toString()}`;
+
+		const searchResponse = await request(app.getHttpServer()).get(searchUrl).expect(200);
+
+		const searchResult = searchResponse.body as SearchServiceReturn;
+		const validatedReceiver = searchResult.values.find(r => r.status === "Validado");
+
+		if (!validatedReceiver) {
+			throw new Error("No validated receiver found for testing");
+		}
+
+		//NOTE: Attempt to partially update the validated receiver
+		const updateDto: PatchOneReceiverDto = {
+			id: validatedReceiver.id,
+			completed_name: "Jane Doe",
+			cpf_cnpj: "12345678900",
+			email: "UPDATED@EMAIL.COM",
+			pix_data: {
+				pix_key_type: "EMAIL",
+				pix_key: "updated@example.com",
+			},
+		};
+
+		const updateResponse = await request(app.getHttpServer())
+			.patch(`/receiver`)
+			.send(updateDto)
+			.expect(200);
+
+		const updatedReceiver = updateResponse.body;
+
+		//NOTE: Verify that only the email was updated
+		expect(updatedReceiver.email).toBe(updateDto.email);
+		expect(updatedReceiver.completed_name).toBe(validatedReceiver.completed_name);
+		expect(updatedReceiver.cpf_cnpj).toBe(validatedReceiver.cpf_cnpj);
+		expect(updatedReceiver.pix_key_type).toBe(validatedReceiver.pix_key_type);
+		expect(updatedReceiver.pix_key).toBe(validatedReceiver.pix_key);
+	});
+
+	it("should update a receiver partially (Receiver Rascunho)", async () => {
 		//NOTE: Create a receiver object
 		const createReceiverDto: CreateReceiverDto = {
 			completed_name: "John Doe",
