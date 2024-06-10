@@ -10,6 +10,11 @@ import { SearchServiceReturn } from "./types/searchReturn";
 export class ReceiverService {
 	constructor(private dbService: DatabaseService) {}
 
+	/**
+	 * @description Create a new receiver on DB
+	 * @param data Objet with the data to be created a receiver
+	 * @returns An object with the created receiver
+	 */
 	async createOne(data: CreateReceiverDto): Promise<IReceiver> {
 		const { pix_data, ...restData } = data;
 
@@ -24,6 +29,15 @@ export class ReceiverService {
 		return newReceiver as IReceiver;
 	}
 
+	/**
+	 * @description Get one receiver from, DB
+	 * @param id Unique id to get the receiver
+	 * @param throwError Opcional boolean to throw an error if not found receiver
+	 * @returns
+	 * if `throwErro` is `true` returns an object with the receiver
+	 *
+	 * if `throwError` is `false` returns an object with the receiver or `null`
+	 */
 	async getOne<T extends boolean = false>(id: number, throwError?: T) {
 		//NOTE: Get the receiver by his id
 		const foundReceiver = await this.dbService.receiver.findUnique({ where: { id } });
@@ -37,6 +51,11 @@ export class ReceiverService {
 		return foundReceiver as T extends true ? IReceiver : IReceiver | null;
 	}
 
+	/**
+	 * @description Remove one receiver from DB
+	 * @param id Unique id to find the receiver
+	 * @returns A receiver object that was removed
+	 */
 	async removeOne(id: number) {
 		//NOTE: Get the receiver by his id  and throw an error if not found
 		await this.getOne(id, true);
@@ -45,10 +64,20 @@ export class ReceiverService {
 		return this.dbService.receiver.delete({ where: { id } });
 	}
 
+	/**
+	 * @description Remove multiple receivers from DB
+	 * @param ids Array of ids to be removed
+	 * @returns A quantity of receivers that were removed
+	 */
 	async removeMany(ids: number[]) {
 		return this.dbService.receiver.deleteMany({ where: { id: { in: ids } } });
 	}
 
+	/**
+	 * @description Patch one receiver from DB
+	 * @param data Partial object with the data to be updated
+	 * @returns A receiver object that was updated
+	 */
 	async patchOne(data: PatchOneReceiverDto) {
 		//NOTE: Get the receiver by his id
 		const foundReceiver = await this.getOne(data.id, true);
@@ -75,6 +104,12 @@ export class ReceiverService {
 		});
 	}
 
+	/**
+	 * @description Search for receivers on DB with a pagination
+	 * @param query A text data to be searched
+	 * @param page Number of page to be returned
+	 * @returns An objet with the search results, total pages, total count and quantity per page
+	 */
 	async search(query: string, page: number): Promise<SearchServiceReturn> {
 		//NOTE: Define the quantity per page
 		const quantityPerPage = 10;
