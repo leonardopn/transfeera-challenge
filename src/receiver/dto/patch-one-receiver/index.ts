@@ -33,6 +33,7 @@ export class PatchOneReceiverDto {
 		message: a => a.property + ": Invalid email. Format: 'A@B.COM'",
 	})
 	@MaxLength(250)
+	@IsOptional()
 	email?: string;
 
 	@ApiProperty({ description: "Receiver name", example: "Jhon Doe" })
