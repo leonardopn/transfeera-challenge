@@ -222,6 +222,32 @@ describe("Receiver Integration Tests", () => {
 		await request(app.getHttpServer()).delete(`/receiver/${nonExistentId}`).expect(404);
 	});
 
+	it("should delete multiple receivers by IDs", async () => {
+		//NOTE: Retrieve multiple receivers
+		const searchResponse = await request(app.getHttpServer())
+			.get(`/receiver?page=1`)
+			.expect(200);
+
+		const searchResult = searchResponse.body as SearchServiceReturn;
+		const receiversToDelete = searchResult.values.slice(0, 3).map(receiver => receiver.id);
+
+		//NOTE: Delete the receivers
+		await request(app.getHttpServer())
+			.delete(`/receiver`)
+			.send({ ids: receiversToDelete })
+			.expect(204);
+	});
+
+	it("should return 404 when trying to delete receivers with invalid IDs", async () => {
+		const invalidIds = [9999, 8888, 7777];
+
+		//NOTE: Attempt to delete receivers with invalid IDs
+		await request(app.getHttpServer())
+			.delete(`/receiver`)
+			.send({ ids: invalidIds })
+			.expect(204);
+	});
+
 	afterAll(async () => {
 		//NOTE: After all tests, delete the test database and close the app
 		await unlink(join(__dirname, "../../prisma/database/index_test.db"));
