@@ -152,7 +152,7 @@ describe("Receiver Integration Tests", () => {
 
 		//NOTE: Verify pagination - first page
 		const firstPageResponse = await request(app.getHttpServer())
-			.get(`/receiver?limit=${limit}&page=1`)
+			.get(`/receiver?page=1`)
 			.expect(200);
 
 		const firstPageReceivers = firstPageResponse.body as SearchServiceReturn;
@@ -162,7 +162,7 @@ describe("Receiver Integration Tests", () => {
 
 		//NOTE: Verify pagination - second page
 		const secondPageResponse = await request(app.getHttpServer())
-			.get(`/receiver?limit=${limit}&page=2`)
+			.get(`/receiver?page=2`)
 			.expect(200);
 
 		const secondPageReceivers = secondPageResponse.body as SearchServiceReturn;
@@ -172,7 +172,7 @@ describe("Receiver Integration Tests", () => {
 
 		//NOTE: Verify pagination - third page
 		const thirdPageResponse = await request(app.getHttpServer())
-			.get(`/receiver?limit=${limit}&page=3`)
+			.get(`/receiver?page=3`)
 			.expect(200);
 
 		const thirdPageReceivers = thirdPageResponse.body as SearchServiceReturn;
@@ -181,11 +181,11 @@ describe("Receiver Integration Tests", () => {
 		expect(thirdPageReceivers.totalCount).toBe(totalReceivers);
 
 		//NOTE: Verify pagination - fourth page - should return an error
-		await request(app.getHttpServer()).get(`/receiver?limit=${limit}&page=4`).expect(412);
+		await request(app.getHttpServer()).get(`/receiver?page=4`).expect(412);
 
 		//NOTE: Verify an empty page
 		await request(app.getHttpServer())
-			.get(`/receiver?q=NOT_FOUND&limit=${limit}`)
+			.get(`/receiver?q=NOT_FOUND`)
 			.expect(200)
 			.then(response => {
 				const responseBody = response.body as SearchServiceReturn;
@@ -194,6 +194,32 @@ describe("Receiver Integration Tests", () => {
 				expect(responseBody.quantityPerPage).toBe(10);
 				expect(responseBody.values.length).toBe(0);
 			});
+	});
+
+	it("should delete a receiver by id", async () => {
+		//NOTE: Retrieve the first receiver
+		const searchResponse = await request(app.getHttpServer())
+			.get(`/receiver?&page=1`)
+			.expect(200);
+
+		const searchResult = searchResponse.body as SearchServiceReturn;
+		const receiverToDelete = searchResult.values[0];
+
+		//NOTE: Verify if the receiver was retrieved
+		expect(receiverToDelete).toBeDefined();
+
+		//NOTE: Delete the receiver
+		await request(app.getHttpServer()).delete(`/receiver/${receiverToDelete.id}`).expect(204);
+
+		// Verify the receiver was deleted
+		await request(app.getHttpServer()).get(`/receiver/${receiverToDelete.id}`).expect(404);
+	});
+
+	it("should return 404 when deleting a non-existent receiver", async () => {
+		const nonExistentId = 9999;
+
+		//NOTE: Attempt to delete a non-existent receiver
+		await request(app.getHttpServer()).delete(`/receiver/${nonExistentId}`).expect(404);
 	});
 
 	afterAll(async () => {
