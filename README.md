@@ -1,73 +1,110 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Transfeera Challenge
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Sumário
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+-   [Sobre](#sobre)
+-   [Rodando local](#rodando-local)
+-   [Acesso ao banco de dados](#acesso-ao-banco-de-dados)
+-   [Testando o App](#testando-o-app)
+-   [Observações](#observações)
+-   [Criador](#criador)
+-   [Licença](#licença)
 
-## Description
+## Sobre
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Este é um projeto desenvolvido como desafio para a Transfeera. Ele foi construído utilizando o [Nest](https://github.com/nestjs/nest) framework TypeScript.
 
-## Installation
+## Rodando local
+
+-   Clone o repositório em sua máquina usando git.
 
 ```bash
-$ yarn install
+git clone https://github.com/leonardopn/transfeera-challenge.git && cd transfeera-challenge
 ```
 
-## Running the app
+-   Instale o [NODE](https://nodejs.org/en/download/package-manager) utilizando a forma que preferir.
+
+-   Instale o yarn para utilizar a versão padronizada no projeto
 
 ```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
+npm install --global yarn
 ```
 
-## Test
+-   Instale as dependências
 
 ```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
+yarn install
 ```
 
-## Support
+-   Crie um arquivo .env seguindo os conteúdo de [.env.example](./.env.example). Para fins de um inicio rápido, utilize o schema abaixo:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```yml
+# NODE
+NODE_ENV="development"
 
-## Stay in touch
+# PORT
+PORT=4000
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# PRISMA
+DATABASE_URL="file:./database/index.db"
+```
 
-## License
+-   Rode a geração do banco de dados local
 
-Nest is [MIT licensed](LICENSE).
+```bash
+yarn prisma:migrate
+```
+
+-   Rode a api localmente:
+
+```bash
+yarn start:dev
+```
+
+-   Acesse a documentação Swagger em: [`http://localhost:4000/api`](http://localhost:4000/api)
+
+-   Utilize a interface do Swagger para testar as rotas.
+
+## Acesso ao banco de dados
+
+Para fins de desenvolvimento, optei pelo uso do [SQLite](https://sqlite.org/) e do [ORM Prisma](https://www.prisma.io/).
+Se você seguiu corretamente os passos para desenvolvimento local, o banco de dados vai estar acessível [neste arquivo](./prisma/database/index.db). Sempre que quiser resetar o banco, basta apagar o arquivo gerado e rodar `yarn prisma:migrate`.
+
+Ao executar `yarn prisma:migrate` a aplicação vai criar o banco de dados local e preenche-lo com 30 entradas aleatórias seguindo as regras de negócio. Caso note que os dados não foram gerados, rode o comando: `yarn prisma db seed`
+
+Caso deseje acessar os dados do banco por uma interface, pode utilizar o [Prisma Studio](https://www.prisma.io/studio) que já está configurado na aplicação rodando o seguinte comando: `yarn prisma:studio`
+
+## Testando o App
+
+A aplicação utiliza a biblioteca jest para realizar os testes de integração e unitários. Para rodar todos os testes da aplicação siga os passos abaixo:
+
+1. _Testes de integração(e2e)_: `yarn test:e2e`
+2. _Testes de unidade_: `yarn test`
+3. _Validar coverage_: `yarn test:cov`
+
+> `ATENÇÃO`: Durante os testes de integração, um banco de dados de teste é gerado e apagado após o término dos testes.
+
+> `ATENÇÃO 2`: Alguns módulos do nest e testes E2E aparecem na listagem de coverage, porém não há necessidade de testa-los. Foquei em manter um alto grau de teste nas validações, serviços e controladores.
+
+## Observações
+
+Gostei bastante de desenvolver a aplicação e implementei as regras de negócio da melhor maneira que pude. Utilizei padrões de injeção de dependência e separação em módulos fornecidos na própria estrutura do Nest, então é simples fazer a adição de novas funcionalidades ou modificar regras e validações.
+
+Durante o desenvolvimento tentei focar em desenvolver utilizando ao máximo tudo que foi me fornecido no teste, porém notei que algumas validações de regex poderiam ser melhoradas como por exemplo validação de poucos padrões de CPF e CNPJ ou a validação de email que aceita padrões errados de email ao meu ver, porém, como disse, foquei em utilizar o quê me foi fornecido e é claro, há sempre a possibilidade de melhoria e modificação, já que deixei bem simples para tanto modificar e testar novamente.
+
+Notei também que nos mockups do desafio, haviam dados bancários como conta, agência, banco e etc. Por não estarem em nenhuma validação ou regra de negócio, preferi não adiciona-los por conta da falta de informação, podendo comprometer outras regras de negócio do sistema. Em um ambiente empresarial, problemas com regex o falta de informação dos requisitos eu provavelmente iria atrás para alinharmos as regras de negócio.
+
+Toda estrutura, variáveis e funcionalidade que fiz, foram escritas em inglês, pois acredito ser uma boa lingua para universalizar o projeto e evitar ambiguidades da lingua portuguesa.
+
+A demais, espero que o sistema cumpra com o esperado, desenvolvi ele entre a sexta a noite e domingo a noite. É claro, também estou sempre disponível para fazer uma analise do código e responder quaisquer perguntas que tenham sobre ele.
+
+## Criador
+
+-   Leonardo Petta do Nascimento
+-   <leonardocps9@gmail.com>
+-   [Linkedin](https://www.linkedin.com/in/leonardo-petta-do-nascimento-75674015b/)
+-   [Site Pessoal](https://www.leonardopetta.dev/)
+
+## Licença
+
+O projeto está licenciado por [MIT](./LICENSE.md)
